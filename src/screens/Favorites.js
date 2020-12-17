@@ -8,7 +8,7 @@ const FavoriteScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       {/* <Text style={styles.headerStyle}>Favorites</Text> */}
-      <List navigation={navigation} data={movieList} />
+      <List navigation={navigation} data={movieList.Search} />
     </View>
   );
 };

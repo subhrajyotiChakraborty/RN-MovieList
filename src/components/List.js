@@ -16,7 +16,7 @@ const List = (props) => {
   return (
     <View style={styles.container}>
       <FlatList
-        data={props.data.Search}
+        data={props.data}
         contentContainerStyle={styles.listContainer}
         numColumns={2}
         keyExtractor={(item) => item.imdbID}

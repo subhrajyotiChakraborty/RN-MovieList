@@ -1,24 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View, TextInput, Platform } from "react-native";
 
 import Feather from "react-native-vector-icons/Feather";
 
 import List from "../components/List";
 import { movieList } from "../data/dummyMovieListData";
+import { useMovies } from "../hooks/useMovies";
 
 const MoviesScreen = ({ navigation }) => {
+  const [search, setSearch] = useState("");
+  // console.log("search text =>", search);
+  const { movies, totalMovies } = useMovies(search || "Jurassic");
+
+  // console.log("movies =>", movies);
+  console.log("totalMovies =>", totalMovies);
+
   return (
     <View style={styles.container}>
-      {/* <Text style={styles.headerStyle}>Movies</Text> */}
       <View style={styles.searchInputContainer}>
         <Feather size={18} name="search" style={styles.searchIconStyle} />
         <TextInput
           style={styles.searchInputStyle}
           placeholder="Search..."
-          returnKeyType="search"
+          returnKeyType="done"
+          value={search}
+          onChangeText={(text) => setSearch(text)}
         />
       </View>
-      <List navigation={navigation} data={movieList} />
+      {movies.length ? <List navigation={navigation} data={movies} /> : null}
     </View>
   );
 };

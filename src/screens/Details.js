@@ -3,16 +3,23 @@ import { Text, StyleSheet } from "react-native";
 
 import Detail from "../components/Detail";
 import { movieDetails } from "../data/dummyMovieDetailsData";
+import { useMovieDetails } from "../hooks/useMovieDetails";
 
 const Details = ({ route, navigation }) => {
   useLayoutEffect(() => {
-    const { imdbID, movieName } = route.params;
+    const { movieName } = route.params;
     navigation.setOptions({
       title: movieName,
     });
   }, [navigation]);
 
-  return <Detail poster={movieDetails.Poster} plot={movieDetails.Plot} />;
+  const { details } = useMovieDetails(route.params.imdbID);
+
+  return (
+    <>
+      {details ? <Detail poster={details.Poster} plot={details.Plot} /> : null}
+    </>
+  );
 };
 
 const styles = StyleSheet.create({
