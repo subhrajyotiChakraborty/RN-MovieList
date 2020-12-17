@@ -19,6 +19,9 @@ const List = (props) => {
         data={props.data}
         contentContainerStyle={styles.listContainer}
         numColumns={2}
+        onEndReached={props.handleLoadMore}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={props.renderListFooter}
         keyExtractor={(item) => item.imdbID}
         renderItem={({ item }) => {
           return (
@@ -31,7 +34,14 @@ const List = (props) => {
                 });
               }}
             >
-              <Image style={styles.cardStyle} source={{ uri: item.Poster }} />
+              {item.Poster === "N/A" ? (
+                <Image
+                  style={styles.cardStyle}
+                  source={require("../../assets/poster_placeholder.jpg")}
+                />
+              ) : (
+                <Image style={styles.cardStyle} source={{ uri: item.Poster }} />
+              )}
             </TouchableOpacity>
           );
         }}

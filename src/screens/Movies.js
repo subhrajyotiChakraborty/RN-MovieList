@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, TextInput, Platform } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Platform,
+  ActivityIndicator,
+} from "react-native";
 
 import Feather from "react-native-vector-icons/Feather";
 
@@ -9,11 +16,40 @@ import { useMovies } from "../hooks/useMovies";
 
 const MoviesScreen = ({ navigation }) => {
   const [search, setSearch] = useState("");
-  // console.log("search text =>", search);
-  const { movies, totalMovies } = useMovies(search || "Jurassic");
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [page, setPage] = useState(1);
+  const { movies, totalMovies, showLoader, endReached } = useMovies(
+    search || "Jurassic",
+    page
+  );
 
-  // console.log("movies =>", movies);
-  console.log("totalMovies =>", totalMovies);
+  console.log("movie data check =>", movies.length);
+  // console.log("totalMovies =>", totalMovies);
+  console.log("length check =>", movies.length);
+
+  const handleRefresh = () => {
+    // handle pull to refresh
+    setPage(1);
+    setSearch("");
+    setIsRefreshing(true);
+  };
+
+  const handleLoadMore = () => {
+    // handle scroll to load item
+    if (totalMovies > 10 && !endReached) {
+      setPage(page + 1);
+    }
+  };
+
+  const renderListFooter = () => {
+    return showLoader ? (
+      <ActivityIndicator
+        style={styles.loaderStyle}
+        size="large"
+        color="black"
+      />
+    ) : null;
+  };
 
   return (
     <View style={styles.container}>
@@ -24,10 +60,22 @@ const MoviesScreen = ({ navigation }) => {
           placeholder="Search..."
           returnKeyType="done"
           value={search}
-          onChangeText={(text) => setSearch(text)}
+          onChangeText={(text) => {
+            setSearch(text);
+            setPage(1);
+          }}
         />
       </View>
-      {movies.length ? <List navigation={navigation} data={movies} /> : null}
+      {movies.length ? (
+        <List
+          navigation={navigation}
+          data={movies}
+          handleLoadMore={handleLoadMore}
+          renderListFooter={renderListFooter}
+        />
+      ) : (
+        <View style={{ flex: 1 }} />
+      )}
     </View>
   );
 };
@@ -61,6 +109,10 @@ const styles = StyleSheet.create({
   searchInputStyle: {
     fontSize: 18,
     flex: 1,
+  },
+  loaderStyle: {
+    justifyContent: "center",
+    alignContent: "center",
   },
 });
 

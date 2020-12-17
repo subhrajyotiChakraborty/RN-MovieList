@@ -1,5 +1,5 @@
 import React, { useLayoutEffect } from "react";
-import { Text, StyleSheet } from "react-native";
+import { Text, StyleSheet, ActivityIndicator } from "react-native";
 
 import Detail from "../components/Detail";
 import { movieDetails } from "../data/dummyMovieDetailsData";
@@ -17,7 +17,15 @@ const Details = ({ route, navigation }) => {
 
   return (
     <>
-      {details ? <Detail poster={details.Poster} plot={details.Plot} /> : null}
+      {details ? (
+        <Detail poster={details.Poster} plot={details.Plot} />
+      ) : (
+        <ActivityIndicator
+          style={styles.loaderStyle}
+          size="large"
+          color="black"
+        />
+      )}
     </>
   );
 };
@@ -25,6 +33,11 @@ const Details = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  loaderStyle: {
+    flex: 1,
+    justifyContent: "center",
+    alignContent: "center",
   },
 });
 

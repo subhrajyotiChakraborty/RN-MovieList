@@ -19,9 +19,13 @@ const Detail = ({ plot, poster }) => {
       <View>
         <Image
           style={styles.posterStyle}
-          source={{
-            uri: poster,
-          }}
+          source={
+            poster === "N/A"
+              ? require("../../assets/poster_placeholder.jpg")
+              : {
+                  uri: poster,
+                }
+          }
         ></Image>
         <View style={styles.movieDetailsWrapper}>
           <Text style={styles.moviePlotStyle}>{plot}</Text>

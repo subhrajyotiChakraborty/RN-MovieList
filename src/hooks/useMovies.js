@@ -2,25 +2,37 @@ import { useEffect, useState } from "react";
 
 import axios from "../axios";
 
-export const useMovies = (searchText) => {
+export const useMovies = (searchText, page) => {
   const [movies, setMovies] = useState([]);
+  const [showLoader, setShowLoader] = useState(false);
+  const [endReached, setEndReached] = useState(false);
   const [totalMovies, setTotalMovies] = useState(0);
 
   useEffect(() => {
     async function fetchMovies() {
       try {
-        const response = await axios.get(`/movies/${searchText}`);
+        setShowLoader(true);
+        const response = await axios.get(`/movies/${searchText}?page=${page}`);
         // console.log("useMovies =>", searchText);
+        setShowLoader(false);
         if (response.data.Response === "True") {
-          setMovies(response.data.Search);
+          if (page === 1) {
+            setMovies([...response.data.Search]);
+          } else {
+            setMovies([...movies, ...response.data.Search]);
+          }
           setTotalMovies(+response.data.totalResults);
+          setEndReached(false);
+        } else {
+          setEndReached(true);
         }
       } catch {
         console.log("Unable to fetch movies!!!");
+        setShowLoader(false);
       }
     }
     fetchMovies();
-  }, [searchText]);
+  }, [searchText, page]);
 
-  return { movies, totalMovies };
+  return { movies, totalMovies, showLoader, endReached };
 };
