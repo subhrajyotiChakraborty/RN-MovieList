@@ -1,27 +1,50 @@
-import React, { useContext } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 
 import List from "../components/List";
-import { movieList } from "../data/dummyMovieListData";
 import { MovieContext } from "../reducers/movieReducer";
+import * as actions from "../actions";
 
 const FavoriteScreen = ({ navigation }) => {
-  const { state } = useContext(MovieContext);
+  const [favListLoader, setFavListLoader] = useState(true);
+  const { state, dispatch } = useContext(MovieContext);
+
+  useEffect(() => {
+    async function fetchFavMovies() {
+      const favMoviesData = await actions.fetchFavMovies();
+      setFavListLoader(false);
+      dispatch(favMoviesData);
+    }
+    fetchFavMovies();
+  }, []);
+
+  const renderList = () => {
+    return state.movies && state.movies.length ? (
+      <List
+        navigation={navigation}
+        data={state.movies}
+        handleLoadMore={() => {}}
+        renderListFooter={null}
+      />
+    ) : (
+      <View style={styles.emptyListTextWrapper}>
+        <Text style={styles.emptyListTextStyle}>
+          No movies added to your favorite list yet...
+        </Text>
+      </View>
+    );
+  };
+
   return (
     <View style={styles.container}>
-      {state.movies && state.movies.length ? (
-        <List
-          navigation={navigation}
-          data={state.movies}
-          handleLoadMore={() => {}}
-          renderListFooter={null}
+      {favListLoader ? (
+        <ActivityIndicator
+          size="large"
+          color="black"
+          style={{ justifyContent: "center", alignContent: "center", flex: 1 }}
         />
       ) : (
-        <View style={styles.emptyListTextWrapper}>
-          <Text style={styles.emptyListTextStyle}>
-            No movies added to your favorite list yet...
-          </Text>
-        </View>
+        renderList()
       )}
     </View>
   );

@@ -11,12 +11,10 @@ import {
 import Feather from "react-native-vector-icons/Feather";
 
 import List from "../components/List";
-import { movieList } from "../data/dummyMovieListData";
 import { useMovies } from "../hooks/useMovies";
 
 const MoviesScreen = ({ navigation }) => {
   const [search, setSearch] = useState("");
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const [page, setPage] = useState(1);
   const { movies, totalMovies, showLoader, endReached } = useMovies(
     search || "Jurassic",
@@ -28,6 +26,7 @@ const MoviesScreen = ({ navigation }) => {
   // console.log("length check =>", movies.length);
 
   const handleLoadMore = () => {
+    console.log("this is called");
     // handle scroll to load item
     if (totalMovies > 10 && !endReached) {
       setPage(page + 1);

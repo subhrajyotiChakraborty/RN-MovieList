@@ -2,10 +2,9 @@ import React, { useLayoutEffect, useContext, useState } from "react";
 import { Text, StyleSheet, ActivityIndicator } from "react-native";
 
 import Detail from "../components/Detail";
-import { movieDetails } from "../data/dummyMovieDetailsData";
 import { useMovieDetails } from "../hooks/useMovieDetails";
 import { MovieContext } from "../reducers/movieReducer";
-import * as actionTypes from "../actions/actionTypes";
+import * as actions from "../actions";
 
 const Details = ({ route, navigation }) => {
   useLayoutEffect(() => {
@@ -19,28 +18,20 @@ const Details = ({ route, navigation }) => {
 
   const { dispatch } = useContext(MovieContext);
   const [isFav, setIsFav] = useState(route.params.isFav);
-
-  const addOrRemoveFromFavListHandler = () => {
+  const addOrRemoveFromFavListHandler = async () => {
     const { Poster, Title, Type, Year, imdbID } = details;
     if (isFav) {
-      console.log("remove call");
-      dispatch({
-        type: actionTypes.REMOVE_FROM_FAV_LIST,
-        payload: imdbID,
-      });
+      const deletedData = await actions.removeFromFavList(imdbID);
+      dispatch(deletedData);
     } else {
-      console.log("add call");
-      dispatch({
-        type: actionTypes.ADD_TO_FAV_LIST,
-        payload: {
-          Poster,
-          Title,
-          Type,
-          Year,
-          imdbID,
-          isFav: true,
-        },
+      const savedData = await actions.addToFavList({
+        Poster,
+        Title,
+        Type,
+        Year,
+        imdbID,
       });
+      dispatch(savedData);
     }
     setIsFav(!isFav);
   };

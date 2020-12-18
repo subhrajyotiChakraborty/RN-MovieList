@@ -4,6 +4,8 @@ import * as actionTypes from "../actions/actionTypes";
 
 const INITIAL_STATE = {
   movies: [],
+  error: false,
+  errorMessage: "",
 };
 
 const movieReducer = (state, action) => {
@@ -16,6 +18,8 @@ const movieReducer = (state, action) => {
         return {
           ...state,
           movies: [...state.movies, action.payload],
+          error: false,
+          errorMessage: "",
         };
       }
       return state;
@@ -27,6 +31,25 @@ const movieReducer = (state, action) => {
       return {
         ...state,
         movies: [...updatedList],
+        error: false,
+        errorMessage: "",
+      };
+
+    case actionTypes.FETCH_FAV_MOVIES:
+      return {
+        ...state,
+        movies: [...action.payload],
+        error: false,
+        errorMessage: "",
+      };
+
+    case actionTypes.REMOVE_FROM_FAV_LIST_ERROR:
+    case actionTypes.ADD_TO_FAV_LIST_ERROR:
+    case actionTypes.FETCH_FAV_MOVIES_ERROR:
+      return {
+        ...state,
+        error: true,
+        errorMessage: action.payload,
       };
 
     default:
