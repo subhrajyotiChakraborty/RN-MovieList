@@ -1,19 +1,28 @@
-import React from "react";
+import React, { useContext } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 import List from "../components/List";
 import { movieList } from "../data/dummyMovieListData";
+import { MovieContext } from "../reducers/movieReducer";
 
 const FavoriteScreen = ({ navigation }) => {
+  const { state } = useContext(MovieContext);
   return (
     <View style={styles.container}>
-      {/* <Text style={styles.headerStyle}>Favorites</Text> */}
-      <List
-        navigation={navigation}
-        data={movieList.Search}
-        handleLoadMore={() => {}}
-        renderListFooter={null}
-      />
+      {state.movies && state.movies.length ? (
+        <List
+          navigation={navigation}
+          data={state.movies}
+          handleLoadMore={() => {}}
+          renderListFooter={null}
+        />
+      ) : (
+        <View style={styles.emptyListTextWrapper}>
+          <Text style={styles.emptyListTextStyle}>
+            No movies added to your favorite list yet...
+          </Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -22,11 +31,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  headerStyle: {
-    fontSize: 20,
-    marginHorizontal: 15,
-    marginVertical: 10,
-    fontWeight: "bold",
+  emptyListTextWrapper: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  emptyListTextStyle: {
+    justifyContent: "center",
+    alignSelf: "center",
+    fontSize: 18,
   },
 });
 

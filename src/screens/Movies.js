@@ -23,16 +23,9 @@ const MoviesScreen = ({ navigation }) => {
     page
   );
 
-  console.log("movie data check =>", movies.length);
+  // console.log("movie data check =>", movies.length);
   // console.log("totalMovies =>", totalMovies);
-  console.log("length check =>", movies.length);
-
-  const handleRefresh = () => {
-    // handle pull to refresh
-    setPage(1);
-    setSearch("");
-    setIsRefreshing(true);
-  };
+  // console.log("length check =>", movies.length);
 
   const handleLoadMore = () => {
     // handle scroll to load item
@@ -74,7 +67,11 @@ const MoviesScreen = ({ navigation }) => {
           renderListFooter={renderListFooter}
         />
       ) : (
-        <View style={{ flex: 1 }} />
+        <ActivityIndicator
+          size="large"
+          color="black"
+          style={{ flex: 1, justifyContent: "center", alignContent: "center" }}
+        />
       )}
     </View>
   );
@@ -84,12 +81,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-  },
-  headerStyle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginHorizontal: 15,
-    marginTop: 10,
   },
   searchInputContainer: {
     flexDirection: "row",

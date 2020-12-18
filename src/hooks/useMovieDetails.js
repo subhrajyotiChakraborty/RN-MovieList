@@ -9,7 +9,6 @@ export const useMovieDetails = (imdbId) => {
     async function getDetails() {
       try {
         const response = await axios.get(`/movie/${imdbId}`);
-        console.log(response.data);
         if (response.data.Response === "True") {
           setDetails(response.data);
         }

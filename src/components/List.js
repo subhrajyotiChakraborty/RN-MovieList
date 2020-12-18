@@ -31,6 +31,7 @@ const List = (props) => {
                 props.navigation.navigate("Details", {
                   imdbID: item.imdbID,
                   movieName: item.Title,
+                  isFav: item.isFav || false,
                 });
               }}
             >

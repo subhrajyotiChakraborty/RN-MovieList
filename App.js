@@ -11,6 +11,7 @@ import Feather from "react-native-vector-icons/Feather";
 import FavoriteScreen from "./src/screens/Favorites";
 import MoviesScreen from "./src/screens/Movies";
 import DetailsScreen from "./src/screens/Details";
+import { MovieProvider } from "./src/reducers/movieReducer";
 
 const Tab = createBottomTabNavigator();
 const MovieStack = createStackNavigator();
@@ -51,35 +52,37 @@ export default function App() {
     return <Feather name={name} color={color} size={size} />;
   };
   return (
-    <View
-      style={{
-        paddingTop: Platform.OS === "ios" ? Constants.statusBarHeight : 0,
-        flex: 1,
-      }}
-    >
-      <StatusBar
-        barStyle={Platform.OS === "ios" ? "dark-content" : "default"}
-      />
-      <NavigationContainer>
-        <Tab.Navigator>
-          <Tab.Screen
-            name="Movies"
-            component={MovieStackScreen}
-            options={{
-              tabBarIcon: ({ focused, color, size }) =>
-                renderTabBarIcon(focused, color, size, "list"),
-            }}
-          />
-          <Tab.Screen
-            name="Favorites"
-            component={FavStackScreen}
-            options={{
-              tabBarIcon: ({ focused, color, size }) =>
-                renderTabBarIcon(focused, color, size, "heart"),
-            }}
-          />
-        </Tab.Navigator>
-      </NavigationContainer>
-    </View>
+    <MovieProvider>
+      <View
+        style={{
+          paddingTop: Platform.OS === "ios" ? Constants.statusBarHeight : 0,
+          flex: 1,
+        }}
+      >
+        <StatusBar
+          barStyle={Platform.OS === "ios" ? "dark-content" : "default"}
+        />
+        <NavigationContainer>
+          <Tab.Navigator>
+            <Tab.Screen
+              name="Movies"
+              component={MovieStackScreen}
+              options={{
+                tabBarIcon: ({ focused, color, size }) =>
+                  renderTabBarIcon(focused, color, size, "list"),
+              }}
+            />
+            <Tab.Screen
+              name="Favorites"
+              component={FavStackScreen}
+              options={{
+                tabBarIcon: ({ focused, color, size }) =>
+                  renderTabBarIcon(focused, color, size, "heart"),
+              }}
+            />
+          </Tab.Navigator>
+        </NavigationContainer>
+      </View>
+    </MovieProvider>
   );
 }

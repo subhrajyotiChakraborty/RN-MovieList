@@ -10,10 +10,11 @@ import {
 } from "react-native";
 
 import Feather from "react-native-vector-icons/Feather";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
 const windowWidth = Dimensions.get("window").width;
 
-const Detail = ({ plot, poster }) => {
+const Detail = ({ plot, poster, addRemoveHandler, ...props }) => {
   return (
     <ScrollView style={styles.container}>
       <View>
@@ -30,14 +31,29 @@ const Detail = ({ plot, poster }) => {
         <View style={styles.movieDetailsWrapper}>
           <Text style={styles.moviePlotStyle}>{plot}</Text>
 
-          <TouchableOpacity style={styles.addRemoveFromFavBtnStyle}>
-            <Feather
-              style={styles.addRemoveFromFavBtnIcon}
-              name="heart"
-              color="blue"
-              size={15}
-            />
-            <Text style={styles.addRemoveFromFavBtnText}>Add To Favorites</Text>
+          <TouchableOpacity
+            style={styles.addRemoveFromFavBtnStyle}
+            onPress={addRemoveHandler}
+          >
+            {props.isFav ? (
+              <FontAwesome5
+                style={styles.addRemoveFromFavBtnIcon}
+                name="heart-broken"
+                color="blue"
+                size={15}
+              />
+            ) : (
+              <Feather
+                style={styles.addRemoveFromFavBtnIcon}
+                name="heart"
+                color="blue"
+                size={15}
+              />
+            )}
+
+            <Text style={styles.addRemoveFromFavBtnText}>
+              {props.isFav ? "Remove from favorites" : "Add To Favorites"}{" "}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
