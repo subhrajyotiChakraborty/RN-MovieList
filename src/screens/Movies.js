@@ -26,7 +26,6 @@ const MoviesScreen = ({ navigation }) => {
   // console.log("length check =>", movies.length);
 
   const handleLoadMore = () => {
-    console.log("this is called");
     // handle scroll to load item
     if (totalMovies > 10 && !endReached) {
       setPage(page + 1);

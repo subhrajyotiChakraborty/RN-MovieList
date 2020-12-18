@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import axios from "../axios";
 
 export const useMovies = (searchText, page) => {
-  console.log(searchText, page);
   const [movies, setMovies] = useState([]);
   const [showLoader, setShowLoader] = useState(false);
   const [endReached, setEndReached] = useState(false);

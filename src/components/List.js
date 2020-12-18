@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -11,15 +11,29 @@ import {
 } from "react-native";
 
 const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
 const List = (props) => {
+  const [
+    onEndReachedCalledDuringMomentum,
+    setOnEndReachedCalledDuringMomentum,
+  ] = useState(true);
+
   return (
     <View style={styles.container}>
       <FlatList
         data={props.data}
         contentContainerStyle={styles.listContainer}
         numColumns={2}
-        onEndReached={props.handleLoadMore}
+        onMomentumScrollBegin={() => {
+          setOnEndReachedCalledDuringMomentum(false);
+        }}
+        onEndReached={() => {
+          if (!onEndReachedCalledDuringMomentum) {
+            props.handleLoadMore();
+            setOnEndReachedCalledDuringMomentum(true);
+          }
+        }}
         onEndReachedThreshold={0.5}
         ListFooterComponent={props.renderListFooter}
         keyExtractor={(item) => item.imdbID}
@@ -54,6 +68,7 @@ const List = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    height: windowHeight,
   },
   listContainer: {
     padding: 10,
