@@ -14,12 +14,14 @@ const Details = ({ route, navigation }) => {
     });
   }, [navigation]);
 
-  const { details } = useMovieDetails(route.params.imdbID);
+  const { data, status, isFetched, error } = useMovieDetails(
+    route.params.imdbID
+  );
 
   const { dispatch } = useContext(MovieContext);
   const [isFav, setIsFav] = useState(route.params.isFav);
   const addOrRemoveFromFavListHandler = async () => {
-    const { Poster, Title, Type, Year, imdbID } = details;
+    const { Poster, Title, Type, Year, imdbID } = data;
     if (isFav) {
       const deletedData = await actions.removeFromFavList(imdbID);
       dispatch(deletedData);
@@ -38,13 +40,13 @@ const Details = ({ route, navigation }) => {
 
   return (
     <>
-      {details ? (
+      {isFetched ? (
         <Detail
-          poster={details.Poster}
-          plot={details.Plot}
+          poster={data?.Poster}
+          plot={data?.Plot}
           addRemoveHandler={addOrRemoveFromFavListHandler}
           isFav={isFav}
-          {...details}
+          {...data}
         />
       ) : (
         <ActivityIndicator
