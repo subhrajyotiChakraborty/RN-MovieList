@@ -1,25 +1,9 @@
-import { useState, useEffect } from "react";
+import { useQuery } from "react-query";
 
-import axios from "../axios";
+import { getMovieDetails } from "../api/movie";
 
 export const useMovieDetails = (imdbId) => {
-  const [details, setDetails] = useState(null);
-
-  useEffect(() => {
-    async function getDetails() {
-      try {
-        const response = await axios.get(`/movie/${imdbId}`);
-        if (response.data.Response === "True") {
-          setDetails(response.data);
-        }
-        setDetails;
-      } catch {
-        console.log("Unable to fetch movie details");
-      }
-    }
-
-    getDetails();
-  }, [imdbId]);
-
-  return { details };
+  return useQuery(["movie", imdbId], () => getMovieDetails(imdbId), {
+    enabled: !!imdbId,
+  });
 };
